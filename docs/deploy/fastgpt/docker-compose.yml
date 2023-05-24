@@ -80,8 +80,4 @@ services:
     network_mode: host
     volumes:
       # 刚创建的文件
-      - /root/fastgpt/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - /root/fastgpt/nginx/logs:/var/log/nginx
-      # https证书，没有的话不填，对应的nginx.conf也要修改
-      - /root/fastgpt/nginx/ssl/docgpt.key:/ssl/docgpt.key
-      - /root/fastgpt/nginx/ssl/docgpt.pem:/ssl/docgpt.pem
+      - /D:/github/FastGPT/docs/deploy/fastgpt/nginx.conf:/etc/nginx/nginx.conf:ro
