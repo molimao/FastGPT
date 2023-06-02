@@ -14,14 +14,13 @@
 如果使用了自己的 Api Key，不会计费。可以在账号页，看到详细账单。
 | 计费项 | 价格: 元/ 1K tokens（包含上下文）|
 | --- | --- |
-| claude - 对话 | 免费 |
 | 知识库 - 索引 | 免费 |
 | chatgpt - 对话 | 0.025 |
 | gpt4 - 对话 | 0.5 |
 | 文件拆分 | 0.025 |
 
 **其他问题**
-请 WX 联系: fastgpt123
+请 WX 联系: YNyiqi
 | 交流群 | 小助手 |
 | ----------------------- | -------------------- |
 | ![](https://otnvvf-imgs.oss.laf.run/wxqun300.jpg) | ![](https://otnvvf-imgs.oss.laf.run/wx300.jpg) |
