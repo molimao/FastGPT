@@ -1,11 +1,11 @@
 # Fast GPT
 
-Fast GPT 允许你使用自己的 openai API KEY 来快速的调用 openai 接口，目前集成了 gpt35 和 embedding. 可构建自己的知识库。
+Fast GPT 允许你使用自己的 openai API KEY 来快速的调用 openai 接口，目前集成了 Gpt35, Gpt4 和 embedding. 可构建自己的知识库。
 
 ## 🛸 在线体验
 
-🎉 [fastgpt.run](https://fastgpt.run/) （国内版）  
-🎉 [ai.fastgpt.run](https://ai.fastgpt.run/) （海外版）
+🎉 [fastgpt.run](https://fastgpt.run/)
+🎉 [ai.fastgpt.run](https://ai.fastgpt.run/)
 
 ![Demo](docs/imgs/demo.png?raw=true 'demo')
 
@@ -21,7 +21,8 @@ Fast GPT 允许你使用自己的 openai API KEY 来快速的调用 openai 接�
 
 ## 🚀 私有化部署
 
-- [docker-compose 部署教程](docs/deploy/docker.md)
+- [Sealos 部署](https://sealos.io/docs/examples/ai-applications/install-fastgpt-on-desktop) 无需服务器，代理和域名。
+- [docker-compose 部署](docs/deploy/docker.md)
 - [由社区贡献的宝塔部署和本地运行教程](https://space.bilibili.com/431177525/channel/collectiondetail?sid=1370663)
 
 ## :point_right: RoadMap
@@ -36,8 +37,8 @@ Fast GPT 允许你使用自己的 openai API KEY 来快速的调用 openai 接�
 ## 👀 其他
 
 - [FastGpt 常见问题](https://kjqvjse66l.feishu.cn/docx/HtrgdT0pkonP4kxGx8qcu6XDnGh)
+- [docker 部署教程](https://www.bilibili.com/video/BV1jo4y147fT/)
 - [公众号接入](https://www.bilibili.com/video/BV1xh4y1t7fy/)
-- [FastGpt + Laf 最佳实践，将知识库装入公众号，点击去 Laf 公众号体验效果](https://b4jky7-fastgpt.oss.laf.run/lafercode.png)
 - [FastGpt V3.4 更新集合](https://www.bilibili.com/video/BV1Lo4y147Qh/?vd_source=92041a1a395f852f9d89158eaa3f61b4)
 - [FastGpt 知识库演示](https://www.bilibili.com/video/BV1Wo4y1p7i1/)
 
