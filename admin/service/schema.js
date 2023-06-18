@@ -61,14 +61,15 @@ const modelSchema = new mongoose.Schema({
   name: String,
   avatar: String,
   status: String,
+  intro: String,
   chat: {
     relatedKbs: [mongoose.Schema.Types.ObjectId],
-    searchMode: String,
     systemPrompt: String,
     temperature: Number,
     chatModel: String
   },
   share: {
+    topNum: Number,
     isShare: Boolean,
     isShareDetail: Boolean,
     intro: String,

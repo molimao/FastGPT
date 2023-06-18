@@ -29,14 +29,14 @@ const fileExtension = '.txt,.doc,.docx,.pdf,.md';
 
 const modeMap = {
   [TrainingModeEnum.qa]: {
-    maxLen: 9000,
+    maxLen: 8000,
     slideLen: 3000,
-    price: ChatModelMap[OpenAiChatEnum.GPT35].price,
+    price: ChatModelMap[OpenAiChatEnum.GPT3516k].price,
     isPrompt: true
   },
   [TrainingModeEnum.index]: {
-    maxLen: 2000,
-    slideLen: 600,
+    maxLen: 1000,
+    slideLen: 500,
     price: embeddingPrice,
     isPrompt: false
   }

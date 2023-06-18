@@ -6,7 +6,6 @@ const map = {
   model: require('./icons/model.svg').default,
   copy: require('./icons/copy.svg').default,
   chatSend: require('./icons/chatSend.svg').default,
-  develop: require('./icons/develop.svg').default,
   user: require('./icons/user.svg').default,
   delete: require('./icons/delete.svg').default,
   withdraw: require('./icons/withdraw.svg').default,
@@ -33,7 +32,9 @@ const map = {
   export: require('./icons/export.svg').default,
   text: require('./icons/text.svg').default,
   history: require('./icons/history.svg').default,
-  kbTest: require('./icons/kbTest.svg').default
+  kbTest: require('./icons/kbTest.svg').default,
+  date: require('./icons/date.svg').default,
+  apikey: require('./icons/apikey.svg').default
 };
 
 export type IconName = keyof typeof map;

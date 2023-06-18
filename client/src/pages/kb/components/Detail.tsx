@@ -36,10 +36,11 @@ const Detail = ({ kbId }: { kbId: string }) => {
   });
   const { reset } = form;
 
-  useQuery([kbId, myKbList], () => getKbDetail(kbId), {
+  useQuery([kbId], () => getKbDetail(kbId), {
     onSuccess(res) {
       kbId && setLastKbId(kbId);
       if (res) {
+        setCurrentTab(TabEnum.data);
         reset(res);
         BasicInfo.current?.initInput?.(res.tags);
       }

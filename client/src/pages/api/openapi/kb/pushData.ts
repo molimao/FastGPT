@@ -73,17 +73,23 @@ export async function pushDataToKb({
   const set = new Set();
   const filterData: DateItemType[] = [];
 
+  const time = Date.now();
+  console.log('push data', data.length);
+
   data.forEach((item) => {
     const text = item.q + item.a;
 
-    // count token
-    const token = modelToolMap[OpenAiChatEnum.GPT35].countTokens({
-      messages: [{ obj: 'System', value: item.q }]
-    });
+    if (mode === TrainingModeEnum.qa) {
+      // count token
+      const token = modelToolMap[OpenAiChatEnum.GPT3516k].countTokens({
+        messages: [{ obj: 'System', value: item.q }]
+      });
+      if (token > modeMaxToken[TrainingModeEnum.qa]) {
+        return;
+      }
+    }
 
-    if (mode === TrainingModeEnum.qa && token > modeMaxToken[TrainingModeEnum.qa]) {
-      console.log('q is too long');
-    } else if (!set.has(text)) {
+    if (!set.has(text)) {
       filterData.push(item);
       set.add(text);
     }
@@ -149,6 +155,8 @@ export async function pushDataToKb({
   );
 
   insertData.length > 0 && startQueue();
+
+  console.log('push data finish', Date.now() - time);
 
   return {
     insertLen: insertData.length

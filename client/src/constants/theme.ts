@@ -15,9 +15,7 @@ const { definePartsStyle: selectPart, defineMultiStyleConfig: selectMultiStyle }
 // modal 弹窗
 const ModalTheme = defineMultiStyleConfig({
   baseStyle: definePartsStyle({
-    dialog: {
-      width: '90%'
-    }
+    dialog: {}
   })
 });
 
@@ -39,7 +37,7 @@ const Button = defineStyleConfig({
     },
     sm: {
       fontSize: 'sm',
-      px: 3,
+      px: 4,
       py: 0,
       fontWeight: 'normal',
       height: '26px',

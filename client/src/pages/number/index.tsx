@@ -13,35 +13,31 @@ import { useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useSelectFile } from '@/hooks/useSelectFile';
 import { compressImg } from '@/utils/file';
-import { useCopyData } from '@/utils/tools';
+import { getErrText, useCopyData } from '@/utils/tools';
+import { authOpenAiKey } from '@/utils/plugin/openai';
+
 import Loading from '@/components/Loading';
 import Avatar from '@/components/Avatar';
 import MyIcon from '@/components/Icon';
 import Tabs from '@/components/Tabs';
+import BillTable from './components/BillTable';
 
 const PayRecordTable = dynamic(() => import('./components/PayRecordTable'), {
-  loading: () => <Loading fixed={false} />,
-  ssr: false
-});
-const BilTable = dynamic(() => import('./components/BillTable'), {
-  loading: () => <Loading fixed={false} />,
-  ssr: false
+  ssr: true
 });
 const PromotionTable = dynamic(() => import('./components/PromotionTable'), {
-  loading: () => <Loading fixed={false} />,
-  ssr: false
+  ssr: true
 });
 const InformTable = dynamic(() => import('./components/InformTable'), {
-  loading: () => <Loading fixed={false} />,
-  ssr: false
+  ssr: true
 });
 const PayModal = dynamic(() => import('./components/PayModal'), {
   loading: () => <Loading fixed={false} />,
-  ssr: false
+  ssr: true
 });
 const WxConcat = dynamic(() => import('@/components/WxConcat'), {
   loading: () => <Loading fixed={false} />,
-  ssr: false
+  ssr: true
 });
 
 enum TableEnum {
@@ -53,7 +49,7 @@ enum TableEnum {
 
 const NumberSetting = ({ tableType }: { tableType: `${TableEnum}` }) => {
   const tableList = useRef([
-    { label: '账单', id: TableEnum.bill, Component: <BilTable /> },
+    { label: '账单', id: TableEnum.bill, Component: <BillTable /> },
     { label: '充值', id: TableEnum.pay, Component: <PayRecordTable /> },
     { label: '佣金', id: TableEnum.promotion, Component: <PromotionTable /> },
     { label: '通知', id: TableEnum.inform, Component: <InformTable /> }
@@ -88,6 +84,7 @@ const NumberSetting = ({ tableType }: { tableType: `${TableEnum}` }) => {
     async (data: UserUpdateParams) => {
       setLoading(true);
       try {
+        data.openaiKey && (await authOpenAiKey(data.openaiKey));
         await putUserInfo({
           openaiKey: data.openaiKey,
           avatar: data.avatar
@@ -101,7 +98,12 @@ const NumberSetting = ({ tableType }: { tableType: `${TableEnum}` }) => {
           title: '更新成功',
           status: 'success'
         });
-      } catch (error) {}
+      } catch (error) {
+        toast({
+          title: getErrText(error),
+          status: 'error'
+        });
+      }
       setLoading(false);
     },
     [reset, setLoading, toast, updateUserInfo]
@@ -112,14 +114,15 @@ const NumberSetting = ({ tableType }: { tableType: `${TableEnum}` }) => {
       const file = e[0];
       if (!file) return;
       try {
-        const base64 = await compressImg({
+        const src = await compressImg({
           file,
           maxW: 100,
           maxH: 100
         });
+
         onclickSave({
           ...userInfo,
-          avatar: base64
+          avatar: src
         });
       } catch (err: any) {
         toast({

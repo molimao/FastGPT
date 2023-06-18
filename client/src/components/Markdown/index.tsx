@@ -1,9 +1,8 @@
-import React, { memo, useMemo, useEffect } from 'react';
+import React, { memo, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { formatLinkText } from '@/utils/tools';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
-import remarkBreaks from 'remark-breaks';
 import rehypeKatex from 'rehype-katex';
 
 import 'katex/dist/katex.min.css';
@@ -11,6 +10,7 @@ import styles from './index.module.scss';
 import CodeLight from './codeLight';
 import Loading from './Loading';
 import MermaidCodeBlock from './MermaidCodeBlock';
+import MdImage from './Image';
 
 const Markdown = ({
   source,
@@ -30,15 +30,22 @@ const Markdown = ({
       className={`markdown ${styles.markdown}
         ${isChatting ? (source === '' ? styles.waitingAnimation : styles.animation) : ''}
       `}
-      remarkPlugins={[remarkGfm, remarkMath, remarkBreaks]}
+      remarkPlugins={[remarkGfm, remarkMath]}
       rehypePlugins={[rehypeKatex]}
       components={{
         pre: 'div',
+        img({ src = '' }) {
+          return isChatting ? <Loading text="图片加载中..." /> : <MdImage src={src} />;
+        },
         code({ node, inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '');
 
           if (match?.[1] === 'mermaid') {
-            return isChatting ? <Loading /> : <MermaidCodeBlock code={String(children)} />;
+            return isChatting ? (
+              <Loading text="导图加载中..." />
+            ) : (
+              <MermaidCodeBlock code={String(children)} />
+            );
           }
 
           return (

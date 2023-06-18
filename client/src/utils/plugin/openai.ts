@@ -4,6 +4,8 @@ import { ChatRoleEnum } from '@/constants/chat';
 import { ChatCompletionRequestMessage, ChatCompletionRequestMessageRoleEnum } from 'openai';
 import { OpenAiChatEnum } from '@/constants/model';
 import Graphemer from 'graphemer';
+import axios from 'axios';
+import dayjs from 'dayjs';
 
 const textDecoder = new TextDecoder();
 const graphemer = new Graphemer();
@@ -12,6 +14,11 @@ export const getOpenAiEncMap = () => {
   if (typeof window !== 'undefined') {
     window.OpenAiEncMap = window.OpenAiEncMap || {
       [OpenAiChatEnum.GPT35]: encoding_for_model('gpt-3.5-turbo', {
+        '<|im_start|>': 100264,
+        '<|im_end|>': 100265,
+        '<|im_sep|>': 100266
+      }),
+      [OpenAiChatEnum.GPT3516k]: encoding_for_model('gpt-3.5-turbo', {
         '<|im_start|>': 100264,
         '<|im_end|>': 100265,
         '<|im_sep|>': 100266
@@ -36,6 +43,11 @@ export const getOpenAiEncMap = () => {
         '<|im_end|>': 100265,
         '<|im_sep|>': 100266
       }),
+      [OpenAiChatEnum.GPT3516k]: encoding_for_model('gpt-3.5-turbo', {
+        '<|im_start|>': 100264,
+        '<|im_end|>': 100265,
+        '<|im_sep|>': 100266
+      }),
       [OpenAiChatEnum.GPT4]: encoding_for_model('gpt-4', {
         '<|im_start|>': 100264,
         '<|im_end|>': 100265,
@@ -51,6 +63,11 @@ export const getOpenAiEncMap = () => {
   }
   return {
     [OpenAiChatEnum.GPT35]: encoding_for_model('gpt-3.5-turbo', {
+      '<|im_start|>': 100264,
+      '<|im_end|>': 100265,
+      '<|im_sep|>': 100266
+    }),
+    [OpenAiChatEnum.GPT3516k]: encoding_for_model('gpt-3.5-turbo', {
       '<|im_start|>': 100264,
       '<|im_end|>': 100265,
       '<|im_sep|>': 100266
@@ -159,4 +176,27 @@ export const openAiSliceTextByToken = ({
   const encodeText = enc.encode(text);
   const decoder = new TextDecoder();
   return decoder.decode(enc.decode(encodeText.slice(0, length)));
+};
+
+export const authOpenAiKey = async (key: string) => {
+  return axios
+    .get('https://ccdbwscohpmu.cloud.sealos.io/openai/v1/dashboard/billing/subscription', {
+      headers: {
+        Authorization: `Bearer ${key}`
+      }
+    })
+    .then((res) => {
+      if (!res.data.access_until) {
+        return Promise.reject('OpenAI Key 无效，请重试或更换 key');
+      }
+      const keyExpiredTime = dayjs(res.data.access_until * 1000);
+      const currentTime = dayjs();
+      if (keyExpiredTime.isBefore(currentTime)) {
+        return Promise.reject('OpenAI Key 已过期');
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      return Promise.reject(err?.response?.data?.error || 'OpenAI 账号无效，请重试或更换 key');
+    });
 };
