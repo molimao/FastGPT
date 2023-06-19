@@ -19,22 +19,31 @@ export const chatResponse = async ({
   model,
   apiKey,
   temperature,
+  maxToken = 4000,
   messages,
   stream
 }: ChatCompletionType & { model: `${OpenAiChatEnum}` }) => {
+  const modelTokenLimit = ChatModelMap[model]?.contextMaxToken || 4000;
   const filterMessages = ChatContextFilter({
     model,
     prompts: messages,
-    maxTokens: Math.ceil(ChatModelMap[model].contextMaxToken * 0.85)
+    maxTokens: Math.ceil(modelTokenLimit - 300) // filter token. not response maxToken
   });
 
-  const adaptMessages = adaptChatItem_openAI({ messages: filterMessages });
+  const adaptMessages = adaptChatItem_openAI({ messages: filterMessages, reserveId: false });
   const chatAPI = getOpenAIApi();
+
+  const promptsToken = modelToolMap[model].countTokens({
+    messages: filterMessages
+  });
+
+  maxToken = maxToken + promptsToken > modelTokenLimit ? modelTokenLimit - promptsToken : maxToken;
 
   const response = await chatAPI.createChatCompletion(
     {
       model,
-      temperature: Number(temperature) || 0,
+      temperature: Number(temperature || 0),
+      max_tokens: maxToken,
       messages: adaptMessages,
       frequency_penalty: 0.5, // 越大，重复内容越少
       presence_penalty: -0.5, // 越大，越容易出现新内容
@@ -48,7 +57,7 @@ export const chatResponse = async ({
     }
   );
 
-  const responseText = stream ? '' : response.data.choices[0].message?.content || '';
+  const responseText = stream ? '' : response.data.choices?.[0].message?.content || '';
   const totalTokens = stream ? 0 : response.data.usage?.total_tokens || 0;
 
   return {
